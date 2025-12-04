@@ -12,16 +12,12 @@ import './App.css'
 
 function DemoKeyboard({ 
   useWheelMode, 
-  setUseWheelMode, 
-  smallScreenMode, 
-  setSmallScreenMode,
+  smallScreenMode,
   showDemo,
   setShowDemo
 }: {
   useWheelMode: boolean
-  setUseWheelMode: (value: boolean) => void
   smallScreenMode: boolean
-  setSmallScreenMode: (value: boolean) => void
   showDemo: boolean
   setShowDemo: (value: boolean) => void
 }) {
@@ -294,9 +290,7 @@ function AppContent() {
           element={
             <DemoKeyboard 
               useWheelMode={useWheelMode}
-              setUseWheelMode={setUseWheelMode}
               smallScreenMode={smallScreenMode}
-              setSmallScreenMode={setSmallScreenMode}
               showDemo={showDemo}
               setShowDemo={setShowDemo}
             />
