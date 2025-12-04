@@ -10,13 +10,24 @@ import { predictNextLetters } from './utils/apiPredictor'
 import './utils/testGemini' // Load Gemini test utilities
 import './App.css'
 
-function DemoKeyboard() {
+function DemoKeyboard({ 
+  useWheelMode, 
+  setUseWheelMode, 
+  smallScreenMode, 
+  setSmallScreenMode,
+  showDemo,
+  setShowDemo
+}: {
+  useWheelMode: boolean
+  setUseWheelMode: (value: boolean) => void
+  smallScreenMode: boolean
+  setSmallScreenMode: (value: boolean) => void
+  showDemo: boolean
+  setShowDemo: (value: boolean) => void
+}) {
   const [text, setText] = useState('')
-  const [showDemo, setShowDemo] = useState(false)
   const [predictions, setPredictions] = useState<string[]>([])
-  const [useWheelMode, setUseWheelMode] = useState(true)
   const [showWheelOverlay, setShowWheelOverlay] = useState(true)
-  const [smallScreenMode, setSmallScreenMode] = useState(false)
 
   useEffect(() => {
     // Fetch initial predictions
@@ -93,52 +104,22 @@ function DemoKeyboard() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col p-4 pt-20 md:pt-24 md:p-8">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col p-4 pt-4 md:pt-8 md:p-8 relative">
       {/* Header Section */}
-      <div className="w-full max-w-6xl mx-auto mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-2">
-              Predictive Text System
-            </h1>
-            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-              Advanced AI-powered keyboard with contextual predictions
-            </p>
-          </div>
-          <div className="flex gap-3 md:gap-4 flex-wrap">
-            <button
-              onClick={() => setUseWheelMode(!useWheelMode)}
-              className={`px-5 py-2.5 md:px-6 md:py-3 rounded-lg text-sm md:text-base font-medium shadow-sm transition-all border ${
-                useWheelMode 
-                  ? 'bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-white' 
-                  : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
-              }`}
-            >
-              {useWheelMode ? 'Wheel Mode: ON' : 'Wheel Mode: OFF'}
-            </button>
-            <button
-              onClick={() => setSmallScreenMode(!smallScreenMode)}
-              className={`px-5 py-2.5 md:px-6 md:py-3 rounded-lg text-sm md:text-base font-medium shadow-sm transition-all border ${
-                smallScreenMode 
-                  ? 'bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-white' 
-                  : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
-              }`}
-            >
-              {smallScreenMode ? 'Small Screen: ON' : 'Small Screen: OFF'}
-            </button>
-            <button
-              onClick={() => setShowDemo(true)}
-              className="px-5 py-2.5 md:px-6 md:py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg text-sm md:text-base font-medium shadow-sm transition-all"
-            >
-              Auto Demo
-            </button>
-          </div>
+      <div className="w-full max-w-6xl mx-auto mb-4 md:mb-8">
+        <div className="mb-4 md:mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-1 md:mb-2">
+            Predictive Text System
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
+            Advanced AI-powered keyboard with contextual predictions
+          </p>
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className={`mx-auto flex-1 flex flex-col transition-all duration-300 ${
-        smallScreenMode ? 'w-full max-w-[240px] gap-2' : 'w-full max-w-6xl gap-6'
+        smallScreenMode ? 'w-full max-w-[240px] gap-1' : 'w-full max-w-6xl gap-2'
       }`}>
         {smallScreenMode && (
           <div className="text-center mb-1">
@@ -149,7 +130,7 @@ function DemoKeyboard() {
         )}
         
         {/* Text Display - Adaptive size */}
-        <div className={`flex-1 ${smallScreenMode ? 'min-h-[60px]' : 'min-h-[200px] md:min-h-[300px]'}`}>
+        <div className={smallScreenMode ? 'h-[60px]' : 'h-[50px] md:h-[120px] lg:h-[180px]'}>
           <TextDisplay text={text} compact={smallScreenMode} />
         </div>
         
@@ -176,54 +157,162 @@ function DemoKeyboard() {
   )
 }
 
-function Navigation() {
+function Navigation({ 
+  useWheelMode, 
+  setUseWheelMode, 
+  smallScreenMode, 
+  setSmallScreenMode, 
+  setShowDemo 
+}: { 
+  useWheelMode: boolean
+  setUseWheelMode: (value: boolean) => void
+  smallScreenMode: boolean
+  setSmallScreenMode: (value: boolean) => void
+  setShowDemo: (value: boolean) => void
+}) {
   const location = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
   
   if (location.pathname === '/researcher') {
     return null
   }
 
   return (
-    <nav className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 flex gap-2 sm:gap-3">
-      <Link
-        to="/"
-        className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium border transition-all ${
-          location.pathname === '/'
-            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
-            : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
-        }`}
+    <nav className="absolute top-2 right-2 sm:top-4 sm:right-4 z-[100]">
+      {/* Hamburger button - Mobile only */}
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="sm:hidden p-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-md z-[101]"
       >
-        Demo
-      </Link>
-      <Link
-        to="/study"
-        className={`px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium border transition-all ${
-          location.pathname === '/study'
-            ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
-            : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
-        }`}
-      >
-        Study
-      </Link>
-      <Link
-        to="/researcher"
-        className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium border transition-all bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700"
-      >
-        Dashboard
-      </Link>
+        <div className="w-5 h-4 flex flex-col justify-between">
+          <span className={`block h-0.5 bg-gray-900 dark:bg-white transition-transform ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+          <span className={`block h-0.5 bg-gray-900 dark:bg-white transition-opacity ${menuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`block h-0.5 bg-gray-900 dark:bg-white transition-transform ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+        </div>
+      </button>
+
+      {/* Menu content - Hidden on mobile unless open, always visible on desktop */}
+      <div className={`flex-col gap-1.5 sm:gap-2 ${menuOpen ? 'flex' : 'hidden sm:flex'} absolute top-12 right-0 sm:static bg-white dark:bg-gray-950 sm:bg-transparent border sm:border-0 border-gray-200 dark:border-gray-800 rounded-lg p-2 sm:p-0 shadow-lg sm:shadow-none z-[101]`}>
+        {/* Page Navigation */}
+        <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
+          <Link
+            to="/"
+            onClick={() => setMenuOpen(false)}
+            className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium border transition-all ${
+              location.pathname === '/'
+                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
+                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
+            }`}
+          >
+            Demo
+          </Link>
+          <Link
+            to="/study"
+            onClick={() => setMenuOpen(false)}
+            className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium border transition-all ${
+              location.pathname === '/study'
+                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
+                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
+            }`}
+          >
+            Study
+          </Link>
+          <Link
+            to="/researcher"
+            onClick={() => setMenuOpen(false)}
+            className="px-3 py-2 rounded-md text-xs sm:text-sm font-medium border transition-all bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700"
+          >
+            Dashboard
+          </Link>
+        </div>
+        
+        {/* Control Buttons - Only show on Demo page */}
+        {location.pathname === '/' && (
+          <>
+            <div className="block sm:hidden h-px bg-gray-200 dark:bg-gray-800 my-1"></div>
+            <div className="flex flex-col gap-1.5">
+              <button
+                onClick={() => {
+                  setUseWheelMode(!useWheelMode)
+                  setMenuOpen(false)
+                }}
+                className={`px-3 py-2 rounded text-xs font-medium shadow-sm transition-all border whitespace-nowrap ${
+                  useWheelMode 
+                    ? 'bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-white' 
+                    : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                Wheel: {useWheelMode ? 'ON' : 'OFF'}
+              </button>
+              <button
+                onClick={() => {
+                  setSmallScreenMode(!smallScreenMode)
+                  setMenuOpen(false)
+                }}
+                className={`px-3 py-2 rounded text-xs font-medium shadow-sm transition-all border whitespace-nowrap ${
+                  smallScreenMode 
+                    ? 'bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-white' 
+                    : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                Small: {smallScreenMode ? 'ON' : 'OFF'}
+              </button>
+              <button
+                onClick={() => {
+                  setShowDemo(true)
+                  setMenuOpen(false)
+                }}
+                className="px-3 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium shadow-sm transition-all whitespace-nowrap"
+              >
+                Auto Demo
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </nav>
+  )
+}
+
+function AppContent() {
+  const [useWheelMode, setUseWheelMode] = useState(true)
+  const [smallScreenMode, setSmallScreenMode] = useState(false)
+  const [showDemo, setShowDemo] = useState(false)
+  
+  return (
+    <>
+      <Navigation 
+        useWheelMode={useWheelMode}
+        setUseWheelMode={setUseWheelMode}
+        smallScreenMode={smallScreenMode}
+        setSmallScreenMode={setSmallScreenMode}
+        setShowDemo={setShowDemo}
+      />
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <DemoKeyboard 
+              useWheelMode={useWheelMode}
+              setUseWheelMode={setUseWheelMode}
+              smallScreenMode={smallScreenMode}
+              setSmallScreenMode={setSmallScreenMode}
+              showDemo={showDemo}
+              setShowDemo={setShowDemo}
+            />
+          } 
+        />
+        <Route path="/study" element={<StudyFlow />} />
+        <Route path="/researcher" element={<ResearcherDashboard />} />
+      </Routes>
+    </>
   )
 }
 
 function App() {
   return (
     <BrowserRouter>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<DemoKeyboard />} />
-        <Route path="/study" element={<StudyFlow />} />
-        <Route path="/researcher" element={<ResearcherDashboard />} />
-      </Routes>
+      <AppContent />
     </BrowserRouter>
   )
 }

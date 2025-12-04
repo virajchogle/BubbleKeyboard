@@ -11,15 +11,20 @@ export default function TextDisplay({ text, compact = false }: TextDisplayProps)
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className={`w-full h-full bg-gray-50 dark:bg-gray-900 rounded-lg overflow-y-auto border border-gray-200 dark:border-gray-800 ${
-        compact ? 'p-2' : 'p-6 md:p-8 lg:p-10'
+        compact ? 'p-2' : 'p-2 md:p-4 lg:p-6'
       }`}
     >
       <div className={`break-words whitespace-pre-wrap text-gray-900 dark:text-gray-100 font-light ${
-        compact ? 'text-xs leading-tight' : 'text-2xl md:text-4xl lg:text-5xl leading-relaxed'
+        compact ? 'text-xs leading-tight' : 'text-sm md:text-xl lg:text-3xl leading-snug md:leading-relaxed'
       }`}>
         {text.length === 0 ? (
           <span className="text-gray-400 dark:text-gray-600">
-            {compact ? 'Type...' : 'Begin typing to see predictions'}
+            {compact ? 'Type...' : (
+              <>
+                <span className="md:hidden">Type here...</span>
+                <span className="hidden md:inline">Begin typing to see predictions</span>
+              </>
+            )}
           </span>
         ) : (
           <>
@@ -39,7 +44,7 @@ export default function TextDisplay({ text, compact = false }: TextDisplayProps)
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 1, repeat: Infinity }}
           className={`inline-block bg-gray-900 dark:bg-white ml-1 align-middle ${
-            compact ? 'w-0.5 h-3' : 'w-1 h-8 md:h-12 lg:h-16'
+            compact ? 'w-0.5 h-3' : 'w-0.5 h-4 md:w-0.5 md:h-6 lg:w-1 lg:h-10'
           }`}
         />
       </div>

@@ -52,7 +52,8 @@ export default function PredictionWheel({
     topPredictions.push('')
   }
 
-  const wheelSize = compact ? 180 : 240
+  // Responsive sizing: smaller on mobile, larger on desktop
+  const wheelSize = compact ? 150 : (typeof window !== 'undefined' && window.innerWidth < 768 ? 200 : 240)
 
   return (
     <AnimatePresence>
