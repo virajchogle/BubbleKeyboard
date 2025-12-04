@@ -158,6 +158,7 @@ function getCurrentWord(text: string): string {
 /**
  * Get previous complete word
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPreviousWord(text: string): string {
   const words = text.trim().toLowerCase().split(/\s+/)
   return words.length > 1 ? words[words.length - 2] : ''

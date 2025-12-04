@@ -49,7 +49,9 @@ function cachePredictions(text: string, predictions: Prediction[]) {
   // Simple cache size management
   if (predictionCache.size >= MAX_CACHE_SIZE) {
     const firstKey = predictionCache.keys().next().value
-    predictionCache.delete(firstKey)
+    if (firstKey) {
+      predictionCache.delete(firstKey)
+    }
   }
   
   predictionCache.set(key, {
