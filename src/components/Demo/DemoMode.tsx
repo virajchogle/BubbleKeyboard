@@ -244,7 +244,7 @@ export default function DemoMode({ onClose }: DemoModeProps) {
 
       {/* Main Content Area */}
       <div className={`mx-auto flex-1 flex flex-col transition-all duration-300 ${
-        smallScreenMode ? 'w-full max-w-[240px] gap-2' : 'w-full max-w-6xl gap-6'
+        smallScreenMode ? 'w-full max-w-[240px] gap-1' : 'w-full max-w-6xl gap-2'
       }`}>
         {smallScreenMode && (
           <div className="text-center mb-1">
@@ -255,7 +255,7 @@ export default function DemoMode({ onClose }: DemoModeProps) {
         )}
         
         {/* Text Display - Adaptive size */}
-        <div className={`flex-1 ${smallScreenMode ? 'min-h-[60px]' : 'min-h-[200px] md:min-h-[300px]'}`}>
+        <div className={smallScreenMode ? 'h-[60px]' : 'h-[50px] md:h-[120px] lg:h-[180px]'}>
           <TextDisplay text={text} compact={smallScreenMode} />
         </div>
 
