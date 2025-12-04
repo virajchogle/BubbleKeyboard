@@ -105,10 +105,10 @@ function DemoKeyboard({
       <div className="w-full max-w-6xl mx-auto mb-4 md:mb-8">
         <div className="mb-4 md:mb-8">
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-1 md:mb-2">
-            Predictive Text System
+            Bubble Wheel Keyboard
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
-            Advanced AI-powered keyboard with contextual predictions
+            Radial text entry interface for smartwatches with AI-powered predictions
           </p>
         </div>
       </div>
