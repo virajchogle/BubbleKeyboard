@@ -156,13 +156,12 @@ function getCurrentWord(text: string): string {
 }
 
 /**
- * Get previous complete word
+ * Get previous complete word (reserved for future use)
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getPreviousWord(text: string): string {
-  const words = text.trim().toLowerCase().split(/\s+/)
-  return words.length > 1 ? words[words.length - 2] : ''
-}
+// function getPreviousWord(text: string): string {
+//   const words = text.trim().toLowerCase().split(/\s+/)
+//   return words.length > 1 ? words[words.length - 2] : ''
+// }
 
 /**
  * Predict next letter after space (start of new word)
