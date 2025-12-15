@@ -6,6 +6,7 @@ import PredictionWheel from './components/PredictionWheel'
 import StudyFlow from './components/Study/StudyFlow'
 import ResearcherDashboard from './components/Dashboard/ResearcherDashboard'
 import DemoMode from './components/Demo/DemoMode'
+import AppleWatchSimulator from './components/AppleWatch/AppleWatchSimulator'
 import { predictNextLetters } from './utils/apiPredictor'
 import './utils/testGemini' // Load Gemini test utilities
 import './App.css'
@@ -14,12 +15,16 @@ function DemoKeyboard({
   useWheelMode, 
   smallScreenMode,
   showDemo,
-  setShowDemo
+  setShowDemo,
+  showAppleWatch,
+  setShowAppleWatch
 }: {
   useWheelMode: boolean
   smallScreenMode: boolean
   showDemo: boolean
   setShowDemo: (value: boolean) => void
+  showAppleWatch: boolean
+  setShowAppleWatch: (value: boolean) => void
 }) {
   const [text, setText] = useState('')
   const [predictions, setPredictions] = useState<string[]>([])
@@ -99,6 +104,10 @@ function DemoKeyboard({
     return <DemoMode onClose={() => setShowDemo(false)} />
   }
 
+  if (showAppleWatch) {
+    return <AppleWatchSimulator onClose={() => setShowAppleWatch(false)} />
+  }
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col p-4 pt-4 md:pt-8 md:p-8 relative">
       {/* Header Section */}
@@ -158,13 +167,15 @@ function Navigation({
   setUseWheelMode, 
   smallScreenMode, 
   setSmallScreenMode, 
-  setShowDemo 
+  setShowDemo,
+  setShowAppleWatch
 }: { 
   useWheelMode: boolean
   setUseWheelMode: (value: boolean) => void
   smallScreenMode: boolean
   setSmallScreenMode: (value: boolean) => void
   setShowDemo: (value: boolean) => void
+  setShowAppleWatch: (value: boolean) => void
 }) {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -220,6 +231,17 @@ function Navigation({
           >
             Dashboard
           </Link>
+          <Link
+            to="/watch"
+            onClick={() => setMenuOpen(false)}
+            className={`px-3 py-2 rounded-md text-xs sm:text-sm font-medium border transition-all flex items-center gap-1 ${
+              location.pathname === '/watch'
+                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white'
+                : 'bg-black text-white border-gray-700 hover:bg-gray-900'
+            }`}
+          >
+            <span>⌚</span> Watch
+          </Link>
         </div>
         
         {/* Control Buttons - Only show on Demo page */}
@@ -262,6 +284,15 @@ function Navigation({
               >
                 Auto Demo
               </button>
+              <button
+                onClick={() => {
+                  setShowAppleWatch(true)
+                  setMenuOpen(false)
+                }}
+                className="px-3 py-2 bg-black hover:bg-gray-900 text-white border border-gray-700 rounded text-xs font-medium shadow-sm transition-all whitespace-nowrap flex items-center gap-1.5"
+              >
+                <span>⌚</span> Apple Watch
+              </button>
             </div>
           </>
         )}
@@ -274,6 +305,7 @@ function AppContent() {
   const [useWheelMode, setUseWheelMode] = useState(true)
   const [smallScreenMode, setSmallScreenMode] = useState(false)
   const [showDemo, setShowDemo] = useState(false)
+  const [showAppleWatch, setShowAppleWatch] = useState(false)
   
   return (
     <>
@@ -283,6 +315,7 @@ function AppContent() {
         smallScreenMode={smallScreenMode}
         setSmallScreenMode={setSmallScreenMode}
         setShowDemo={setShowDemo}
+        setShowAppleWatch={setShowAppleWatch}
       />
       <Routes>
         <Route 
@@ -293,11 +326,14 @@ function AppContent() {
               smallScreenMode={smallScreenMode}
               showDemo={showDemo}
               setShowDemo={setShowDemo}
+              showAppleWatch={showAppleWatch}
+              setShowAppleWatch={setShowAppleWatch}
             />
           } 
         />
         <Route path="/study" element={<StudyFlow />} />
         <Route path="/researcher" element={<ResearcherDashboard />} />
+        <Route path="/watch" element={<AppleWatchSimulator />} />
       </Routes>
     </>
   )

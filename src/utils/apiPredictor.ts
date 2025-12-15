@@ -61,6 +61,21 @@ function cachePredictions(text: string, predictions: Prediction[]) {
 }
 
 /**
+ * Remove duplicate predictions (case-insensitive)
+ */
+function deduplicatePredictions(predictions: Prediction[]): Prediction[] {
+  const seen = new Set<string>()
+  return predictions.filter(p => {
+    const normalized = p.letter.toUpperCase()
+    if (seen.has(normalized)) {
+      return false
+    }
+    seen.add(normalized)
+    return true
+  })
+}
+
+/**
  * Predicts next letters using Gemini API if available,
  * otherwise falls back to improved local prediction
  */
@@ -91,7 +106,7 @@ export async function predictNextLetters(
     
     if (timeSinceLastCall < MIN_API_INTERVAL) {
       console.log(`⏱️  Rate limited, using local predictor (${MIN_API_INTERVAL - timeSinceLastCall}ms remaining)`)
-      const localResult = smartPredict(currentText)
+      const localResult = deduplicatePredictions(smartPredict(currentText))
       cachePredictions(currentText, localResult)
       return localResult
     }
@@ -102,12 +117,13 @@ export async function predictNextLetters(
       const result = await predictNextLettersGemini(currentText)
       console.log('✅ Gemini returned:', result)
       
-      // Cache the result
-      cachePredictions(currentText, result)
-      return result
+      // Deduplicate and cache the result
+      const dedupedResult = deduplicatePredictions(result)
+      cachePredictions(currentText, dedupedResult)
+      return dedupedResult
     } catch (error) {
       console.warn('❌ Gemini API failed, using local smart predictor:', error)
-      const localResult = smartPredict(currentText)
+      const localResult = deduplicatePredictions(smartPredict(currentText))
       cachePredictions(currentText, localResult)
       return localResult
     }
@@ -115,12 +131,12 @@ export async function predictNextLetters(
   
   console.log('📍 Using local predictor (no API key or useAPI=false)')
   // Fallback to smart local prediction
-  const localResult = smartPredict(currentText)
+  const localResult = deduplicatePredictions(smartPredict(currentText))
   cachePredictions(currentText, localResult)
   return localResult
 }
 
 // Export synchronous version for compatibility
 export function predictNextLettersSync(currentText: string): Prediction[] {
-  return smartPredict(currentText)
+  return deduplicatePredictions(smartPredict(currentText))
 }

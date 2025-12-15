@@ -36,8 +36,18 @@ export default function PredictionWheel({
     return false
   }
 
+  // Remove duplicates (case-insensitive) and get top 4 unique predictions
+  const uniquePredictions = predictions.reduce((acc: string[], letter) => {
+    if (!letter) return acc
+    const normalizedLetter = letter.toUpperCase()
+    if (!acc.some(l => l.toUpperCase() === normalizedLetter)) {
+      acc.push(letter)
+    }
+    return acc
+  }, []).slice(0, 4)
+
   // Get top 4 predictions with proper case
-  const topPredictions = predictions.slice(0, 4).map(letter => {
+  const topPredictions = uniquePredictions.map(letter => {
     if (!letter) return ''
     
     // Apply context-aware case
