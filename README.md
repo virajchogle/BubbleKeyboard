@@ -60,25 +60,22 @@ npm run dev
 ```
 src/
 ├── components/
-│   ├── Keyboard.tsx          # Main keyboard component with bubble effects
-│   ├── PredictionWheel.tsx   # Pie chart wheel for predictions
-│   ├── TextDisplay.tsx       # Text input display area
+│   ├── Keyboard.tsx          # Main keyboard with bubble effects
+│   ├── PredictionWheel.tsx   # Radial prediction wheel
+│   ├── TextDisplay.tsx       # Text input display
+│   ├── AppleWatch/           # Apple Watch simulator
+│   │   └── AppleWatchSimulator.tsx
 │   ├── Study/                # User study components
-│   │   ├── WelcomeScreen.tsx
-│   │   ├── TaskScreen.tsx
-│   │   ├── QuestionnaireScreen.tsx
-│   │   ├── ResultsScreen.tsx
-│   │   └── StudyFlow.tsx
+│   │   └── ...
 │   ├── Dashboard/            # Researcher dashboard
 │   │   └── ResearcherDashboard.tsx
 │   └── Demo/                 # Demo mode
 │       └── DemoMode.tsx
 ├── utils/
-│   ├── geminiPredictor.ts    # Google Gemini API integration
-│   ├── smartPredictor.ts     # Trigram-based local predictor
+│   ├── geminiPredictor.ts    # Gemini API integration
+│   ├── smartPredictor.ts     # Local trigram predictor
 │   ├── apiPredictor.ts       # Prediction orchestration
-│   ├── bigramData.ts         # Bigram frequency data
-│   └── dataLogger.ts         # Data logging system
+│   └── dataLogger.ts         # Data logging
 └── App.tsx                   # Main app with routing
 ```
 

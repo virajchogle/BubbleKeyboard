@@ -8,7 +8,6 @@ import ResearcherDashboard from './components/Dashboard/ResearcherDashboard'
 import DemoMode from './components/Demo/DemoMode'
 import AppleWatchSimulator from './components/AppleWatch/AppleWatchSimulator'
 import { predictNextLetters } from './utils/apiPredictor'
-import './utils/testGemini' // Load Gemini test utilities
 import './App.css'
 
 function DemoKeyboard({ 
